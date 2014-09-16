@@ -1,10 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.objectdriven.maven</groupId>
     <artifactId>maven-zookeeper-plugin</artifactId>
     <packaging>maven-plugin</packaging>
-    <version>1.0.0-zk3.3.3</version>
+    <version>1.1.0</version>
     <name>maven-zookeeper-plugin Maven Mojo</name>
     <url>https://github.com/sfines/maven-zookeeper-plugin</url>
 
@@ -14,6 +13,19 @@
         <version>7</version>
     </parent>
 
+    <properties>
+        <zookeeper.version>3.4.5-cdh4.5.0</zookeeper.version>
+        <java.version>1.7</java.version>
+        <slf4j.version>1.7.4</slf4j.version>
+        <release.plugin.version>2.3.1</release.plugin.version>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>cloudera-repo-releases</id>
+            <url>https://repository.cloudera.com/artifactory/repo/</url>
+        </repository>
+    </repositories>
 
     <dependencies>
         <dependency>
@@ -28,9 +40,24 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jul-to-slf4j</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.apache.zookeeper</groupId>
             <artifactId>zookeeper</artifactId>
-            <version>3.3.3</version>
+            <version>${zookeeper.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>javax.jms</groupId>
@@ -46,25 +73,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>org.apache.hadoop</groupId>-->
-            <!--<artifactId>zookeeper</artifactId>-->
-            <!--<version>3.3.1</version>-->
-            <!--<exclusions>-->
-                <!--<exclusion>-->
-                    <!--<groupId>javax.jms</groupId>-->
-                    <!--<artifactId>jms</artifactId>-->
-                <!--</exclusion>-->
-                <!--<exclusion>-->
-                    <!--<groupId>com.sun.jdmk</groupId>-->
-                    <!--<artifactId>jmxtools</artifactId>-->
-                <!--</exclusion>-->
-                <!--<exclusion>-->
-                    <!--<groupId>com.sun.jmx</groupId>-->
-                    <!--<artifactId>jmxri</artifactId>-->
-                <!--</exclusion>-->
-            <!--</exclusions>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-artifact</artifactId>
@@ -100,9 +108,21 @@
 		<artifactId>maven-compiler-plugin</artifactId>
 		<version>2.3.2</version>
 		<configuration>
-			<source>1.6</source>
-			<target>1.6</target>
+			<source>${java.version}</source>
+			<target>${java.version}</target>
 		</configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>${release.plugin.version}</version>
+                <configuration>
+                    <preparationGoals>clean install</preparationGoals>
+                    <!-- This is nice to have so you can review all preparation changes before pushing to the world -->
+                    <pushChanges>false</pushChanges>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <releaseProfiles>release</releaseProfiles>
+                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -140,7 +160,7 @@
         <url>git@github.com:sfines/maven-zookeeper-plugin.git</url>
         <connection>scm:git:git@github.com:sfines/maven-zookeeper-plugin.git</connection>
         <developerConnection>scm:git:git@github.com:sfines/maven-zookeeper-plugin.git</developerConnection>
-    </scm>
+  </scm>
 
     <developers>
         <developer>
@@ -151,5 +171,6 @@
             </roles>
         </developer>
     </developers>
+
 
 </project>
