@@ -39,17 +39,6 @@ public class ZookeeperServerLifecycle {
         logger =  Logger.getLogger("org.apache.zookeeper.server");
         logger.setAdditivity(true);
 
-//        if( logLevel == null ) { logger.
-//            logger.setLevel(Level.INFO);
-//        } else if( logLevel.isDebugEnabled()){
-//            logger.setLevel(Level.DEBUG);
-//        } else if( logLevel.isInfoEnabled()){
-//            logger.setLevel(Level.INFO);
-//        } else if( logLevel.isWarnEnabled()){
-//            logger.setLevel(Level.WARN);
-//        } else if( logLevel.isErrorEnabled()){
-//            logger.setLevel(Level.ERROR);
-//        }
     }
 
     /**
@@ -126,15 +115,10 @@ public class ZookeeperServerLifecycle {
         Runnable serverRunnable = new Runnable() {
             public void run() {
                 try {
-                    System.out.println("*********************** ATTEMPT ***************************");
                     cnxnFactory.startup(server);
-                    System.out.println("************************");
-                    System.out.println("Starting server");
-                    System.out.println("************************");
                 } catch (IOException e) {
                     throw new RuntimeException("Unable to start", e);
                 } catch (InterruptedException e) {
-                    System.out.println("********************** INTERUPTED *************************");
                     Thread.interrupted();
                 }
             }
@@ -142,7 +126,6 @@ public class ZookeeperServerLifecycle {
 
         Thread thread = new Thread(serverRunnable, "ZookeeperInProcess-Svr");
         thread.start();
-        System.out.println("*********************** Started Server Thread ***************************");
     }
 
 
